@@ -1,0 +1,22 @@
+{
+  "name": "wetube-v3",
+  "version": "1.0.0",
+  "description": "Cloning Youtube with VanillaJS, nodeJS and MongoDb",
+  "main": "index.js",
+  "scripts": {
+    "start": "node init.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zpskek/wetube-v3.git"
+  },
+  "author": "Hong Jun",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zpskek/wetube-v3/issues"
+  },
+  "homepage": "https://github.com/zpskek/wetube-v3#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
