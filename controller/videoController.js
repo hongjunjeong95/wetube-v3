@@ -1,21 +1,21 @@
 export const home = (req, res) => res.render('home');
 
 export const search = (req, res) => {
-  res.send('Hi search');
+  res.render('Hi search');
 };
 
 export const videoDetail = (req, res) => {
-  res.send('Hi videoDetail');
+  res.render('videoDetail');
 };
 
 export const upload = (req, res) => {
-  res.send('Hi upload');
+  res.render('upload');
 };
 
 export const editVideo = (req, res) => {
-  res.send('Hi editVideo');
+  res.render('editVideo');
 };
 
 export const deleteVideo = (req, res) => {
-  res.send('Hi deleteVideo');
+  res.render('deleteVideo');
 };
