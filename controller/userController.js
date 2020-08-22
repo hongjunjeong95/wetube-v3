@@ -1,21 +1,22 @@
 export const join = (req, res) => {
-  res.send('Hi join');
+  res.render('join');
 };
+
 export const login = (req, res) => {
-  res.send('Hi login');
+  res.render('login');
 };
 export const logout = (req, res) => {
-  res.send('Hi logout');
+  res.render('logout');
 };
 
 export const userDetail = (req, res) => {
-  res.send('Hi userDetail');
+  res.render('userDetail');
 };
 
 export const editProfile = (req, res) => {
-  res.send('Hi editProfile');
+  res.render('editProfile');
 };
 
 export const changePassword = (req, res) => {
-  res.send('Hi changePassword');
+  res.render('changePassword');
 };
