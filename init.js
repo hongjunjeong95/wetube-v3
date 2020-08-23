@@ -1,6 +1,7 @@
 import app from './app';
 import './db';
 import './models/User';
+import './models/Video';
 
 const PORT = process.env.PORT || 5002;
 
