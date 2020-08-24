@@ -1,4 +1,8 @@
-export const join = (req, res) => {
+export const getJoin = (req, res) => {
+  res.render('join');
+};
+
+export const postJoin = (req, res) => {
   res.render('join');
 };
 
