@@ -1,4 +1,14 @@
 extends layouts/main
 
 block content
-  p join
+  .form-container
+    form(action=routes.join method="post").join-form
+      .fileUpload
+        label(for="avatar") Avatar
+        input(type="file" name="avatar" id="avatar" accept="image/*")
+      input(type="text" placeholder="Full name" required=true name="name")
+      input(type="email" placeholder="Email" required=true name="email")
+      input(type="password" placeholder="Password" required=true name="password1")
+      input(type="password" placeholder="Verify password" required=true name="password2")
+      input(type="submit" value="Join now")
+    include partials/socialLogin
