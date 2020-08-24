@@ -1,14 +1,52 @@
+import passport from 'passport';
+import routes from '../routes';
+import User from '../models/User';
+
 export const getJoin = (req, res) => {
-  res.render('join');
+  try {
+    res.render('join', { pageTitle: 'Join' });
+  } catch (error) {
+    console.log(error);
+    res.redirect(routes.home);
+  }
 };
 
-export const postJoin = (req, res) => {
-  res.render('join');
+export const postJoin = async (req, res, next) => {
+  const {
+    body: { name, email, password1, password2 },
+    file,
+  } = req;
+  if (password1 !== password2) {
+    res.status(400);
+    res.redirect(routes.join);
+  }
+  try {
+    const user = await User({
+      name,
+      email,
+      avatarUrl: file ? file.path : null,
+    });
+    await User.register(user, password1);
+    next();
+  } catch (error) {
+    console.log(error);
+    res.redirect(routes.join);
+  }
 };
 
-export const login = (req, res) => {
-  res.render('login');
+export const getLogin = (req, res) => {
+  try {
+    res.render('login', { pageTitle: 'Login' });
+  } catch (error) {
+    console.log(error);
+    res.redirect(routes.home);
+  }
 };
+
+export const postLogin = passport.authenticate('local', {
+  successRedirect: routes.home,
+  failureRedirect: routes.login,
+});
 
 export const logout = (req, res) => {
   res.render('logout');
