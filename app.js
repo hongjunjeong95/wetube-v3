@@ -44,6 +44,8 @@ app.use(passport.session());
 app.use(morgan('dev'));
 app.use(localMiddleware);
 
+app.use('/uploads', express.static('uploads'));
+
 app.use(routes.home, globalRouter);
 app.use(routes.users, userRouter);
 app.use(routes.videos, videoRouter);
