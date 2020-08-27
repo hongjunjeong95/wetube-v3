@@ -16,6 +16,7 @@ import userRouter from './router/userRouter';
 import videoRouter from './router/videoRouter';
 
 import './passport';
+import { githubCSP, kakaoCSP } from './csp';
 
 const app = express();
 const CookieStore = MongoStore(session);
@@ -23,6 +24,9 @@ const CookieStore = MongoStore(session);
 app.use(helmet());
 
 app.set('view engine', 'pug');
+
+app.use(githubCSP);
+app.use(kakaoCSP);
 
 app.use(cookieParser());
 
