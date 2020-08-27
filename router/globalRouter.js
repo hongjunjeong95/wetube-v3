@@ -11,6 +11,8 @@ import {
   getMe,
   githubLogin,
   githubLoginCallback,
+  kakaoLogin,
+  kakaoLoginCallback,
 } from '../controller/userController';
 import { uploadAvatar } from '../middlewares';
 
@@ -32,6 +34,14 @@ globalRouter.get(
   routes.githubCallback,
   passport.authenticate('github', { failureRedirect: routes.login }),
   githubLoginCallback
+);
+
+// Kakao
+globalRouter.get(routes.kakao, kakaoLogin);
+globalRouter.get(
+  routes.kakaoCallback,
+  passport.authenticate('kakao', { failureRedirect: routes.login }),
+  kakaoLoginCallback
 );
 
 globalRouter.get(routes.logout, logout);

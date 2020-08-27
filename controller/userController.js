@@ -51,15 +51,14 @@ export const postLogin = passport.authenticate('local', {
 
 // Github
 export const githubLogin = passport.authenticate('github');
-
 export const githubLoginCallback = (req, res) => {
   res.redirect(routes.home);
 };
-
 export const githubStrategy = async (_, __, profile, cb) => {
   const {
-    _json: { id, avatarUrl, name, email },
+    _json: { id, avatar_url: avatarUrl, name, email },
   } = profile;
+  console.log(profile._json);
   try {
     const user = await User.findOne({ email });
     if (user) {
@@ -71,6 +70,39 @@ export const githubStrategy = async (_, __, profile, cb) => {
       avatarUrl,
       githubId: id,
       name,
+      email,
+    });
+    return cb(null, newUser);
+  } catch (error) {
+    return cb(error);
+  }
+};
+
+// Kakao
+export const kakaoLogin = passport.authenticate('kakao');
+export const kakaoLoginCallback = (req, res) => {
+  res.redirect(routes.home);
+};
+export const kakaoStrategy = async (_, __, profile, cb) => {
+  const {
+    _json: {
+      id,
+      properties: { nickname, profile_image: profileImage },
+      kakao_account: { email },
+    },
+  } = profile;
+  console.log(profile);
+  try {
+    const user = await User.findOne({ email });
+    if (user) {
+      user.kakaoId = id;
+      user.save();
+      return cb(null, user);
+    }
+    const newUser = await User.create({
+      avatarUrl: profileImage,
+      kakoId: id,
+      nickname,
       email,
     });
     return cb(null, newUser);
