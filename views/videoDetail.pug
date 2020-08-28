@@ -1,6 +1,10 @@
 extends layouts/main
+include mixins/videoPlayer
 
 block content
+  +videoPlayer({
+    videoUrl:video.videoUrl,
+  })
   if loggedUser && video.creator.id === loggedUser.id
     .videoEdit
       a(href=routes.editVideo(video.id))
