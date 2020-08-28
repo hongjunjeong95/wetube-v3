@@ -102,7 +102,7 @@ export const kakaoStrategy = async (_, __, profile, cb) => {
     const newUser = await User.create({
       avatarUrl: profileImage,
       kakoId: id,
-      nickname,
+      name: nickname,
       email,
     });
     return cb(null, newUser);
@@ -166,6 +166,31 @@ export const postEditProfile = async (req, res) => {
   }
 };
 
-export const changePassword = (req, res) => {
-  res.render('changePassword');
+export const getChangePassword = async (req, res) => {
+  try {
+    res.render('changePassword', { pageTitle: 'changePassword' });
+  } catch (error) {
+    console.log(error);
+    res.redirect(routes.home);
+  }
+};
+
+export const postChangePassword = async (req, res) => {
+  const {
+    body: { oldPassword, newPassword, verifyPassword },
+  } = req;
+  if (newPassword !== verifyPassword) {
+    console.log("password doesn't match");
+    res.status(400);
+    res.redirect(`/users${routes.changePassword}`);
+    return;
+  }
+  try {
+    await req.user.changePassword(oldPassword, newPassword);
+    res.redirect(routes.me);
+  } catch (error) {
+    console.log('old password is incorrect');
+    console.log(error);
+    res.redirect(`/users${routes.changePassword}`);
+  }
 };
