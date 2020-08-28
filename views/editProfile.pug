@@ -3,10 +3,11 @@ extends layouts/main
 block content
   .form-container
     form(action=`/users/${routes.editProfile}` method="post" enctype="multipart/form-data").Edit-form
-      if user.avatarUrl.startsWith('http')
-        img(src=user.avatarUrl).profile__avatar
-      else
-        img(src=`/${user.avatarUrl}`).profile__avatar
+      if user.avatarUrl
+        if user.avatarUrl.startsWith('http')
+          img(src=user.avatarUrl).profile__avatar
+        else
+          img(src=`/${user.avatarUrl}`).profile__avatar
       .fileUpload
         label(for="avatar") Avatar
         input(type="file" name="avatar" id="avatar" accept="image/*")
