@@ -1,4 +1,5 @@
 extends layouts/main
+include mixins/videoBlock
 
 block content
   .profile
@@ -15,3 +16,13 @@ block content
             button ✏️ Edit Profile
           a(href=`/users${routes.changePassword}`).changePassword
             button 🔒 Change Password
+  .uploaded-videos
+      each video in user.videos
+        +videoBlock({
+          id:video.id,
+          title:video.title,
+          views:video.views,
+          videoUrl:video.videoUrl,
+          creator: video.creator,
+          createdAt: video.createdAt,
+        })
