@@ -10,7 +10,7 @@ block content
           img(src=`/${user.avatarUrl}`).profile__avatar
       .fileUpload
         label(for="avatar") Avatar
-        input(type="file" name="avatar" id="avatar" accept="image/*")
+        input(type="file" name="avatarFile" id="avatar" accept="image/*")
       input(type="text" placeholder="Full name" required=true name="name" value=user.name)
       input(type="text" placeholder="Status" name="status" value=user.status)
       input(type="submit" value="Edit now")

@@ -7,7 +7,7 @@ dotenv.config();
 const multerAvatar = multer({ dest: 'uploads/avatar' });
 const multerVideo = multer({ dest: 'uploads/video' });
 
-export const uploadAvatar = multerAvatar.single('avatar');
+export const uploadAvatar = multerAvatar.single('avatarFile');
 export const uploadVideo = multerVideo.single('videoFile');
 
 export const localMiddleware = (req, res, next) => {
