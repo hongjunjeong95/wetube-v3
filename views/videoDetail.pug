@@ -1,4 +1,23 @@
 extends layouts/main
 
 block content
-  p videoDetail 
+  if loggedUser && video.creator.id === loggedUser.id
+    .videoEdit
+      a(href=routes.editVideo(video.id))
+        button Edit video
+  .videDetail
+    .video__info
+      h4.video__title #{video.title}
+      if video.views === 1
+        span.video__views 1 view
+      else
+        span.video__views #{video.views} views
+      span.video__createdAt #{video.createdAt}
+    .video__creator
+      a(href=routes.userDetail(video.creator.id))
+        if video.creator.avatarUrl.startsWith('http')
+          img.creatorAvatar(src=video.creator.avatarUrl).avatar--small
+        else
+          img.creatorAvatar(src=`/${video.creator.avatarUrl}`).avatar--small
+        .creatorName #{video.creator.name}
+    p.video__description #{video.description}

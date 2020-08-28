@@ -13,15 +13,24 @@ export const getDate = () => {
 };
 
 export const home = (req, res) => {
-  res.render('search', { pageTitle: 'search' });
+  res.render('home', { pageTitle: 'home' });
 };
 
 export const search = (req, res) => {
   res.render('search', { pageTitle: 'search' });
 };
 
-export const videoDetail = (req, res) => {
-  res.render('videoDetail', { pageTitle: 'videoDetail' });
+export const videoDetail = async (req, res) => {
+  const {
+    params: { id },
+  } = req;
+  try {
+    const video = await Video.findById(id).populate('creator');
+    res.render('videoDetail', { pageTitle: 'videoDetail', video });
+  } catch (error) {
+    console.log(error);
+    res.redirect(routes.home);
+  }
 };
 
 export const getUpload = (req, res) => {
