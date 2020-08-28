@@ -9,7 +9,11 @@ import MongoStore from 'connect-mongo';
 import mongoose from 'mongoose';
 import passport from 'passport';
 
-import { localMiddleware } from './middlewares';
+import {
+  localMiddleware,
+  beforeCheckUser,
+  afterCheckUser,
+} from './middlewares';
 import routes from './routes';
 import globalRouter from './router/globalRouter';
 import userRouter from './router/userRouter';
@@ -41,9 +45,12 @@ app.use(
     store: new CookieStore({ mongooseConnection: mongoose.connection }),
   })
 );
+app.use(beforeCheckUser);
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(afterCheckUser);
 
 app.use(morgan('dev'));
 app.use(localMiddleware);

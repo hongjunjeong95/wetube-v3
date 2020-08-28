@@ -13,25 +13,26 @@ export const getJoin = (req, res) => {
 
 export const postJoin = async (req, res, next) => {
   const {
-    body: { name, email, password1, password2 },
+    body: { name, email, password, password2 },
     file,
   } = req;
-  if (password1 !== password2) {
+
+  if (password !== password2) {
     res.status(400);
     res.redirect(routes.join);
-  }
-  try {
-    const user = await User({
-      name,
-      email,
-      avatarUrl: file ? file.path : null,
-    });
-    console.log('postjoin', user);
-    await User.register(user, password1);
-    next();
-  } catch (error) {
-    console.log(error);
-    res.redirect(routes.join);
+  } else {
+    try {
+      const user = await User({
+        name,
+        email,
+        avatarUrl: file ? file.path : null,
+      });
+      await User.register(user, password);
+      next();
+    } catch (error) {
+      console.log(error);
+      res.redirect(routes.join);
+    }
   }
 };
 
