@@ -1,4 +1,15 @@
 extends layouts/main
 
 block content
-  p editProfile 
+  .form-container
+    form(action=`/users/${routes.editProfile}` method="post" enctype="multipart/form-data").Edit-form
+      if user.avatarUrl.startsWith('http')
+        img(src=user.avatarUrl).profile__avatar
+      else
+        img(src=`/${user.avatarUrl}`).profile__avatar
+      .fileUpload
+        label(for="avatar") Avatar
+        input(type="file" name="avatar" id="avatar" accept="image/*")
+      input(type="text" placeholder="Full name" required=true name="name" value=user.name)
+      input(type="text" placeholder="Status" required=true name="status" value=user.status)
+      input(type="submit" value="Edit now")

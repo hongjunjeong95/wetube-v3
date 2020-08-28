@@ -7,6 +7,7 @@ block content
     .profile__column
       .profile__name #{user.name}
       .profile__email #{user.email}
+      .profile__status #{user.status}
     .profile__column
       .profile__btns
         if loggedUser && loggedUser.id === user.id

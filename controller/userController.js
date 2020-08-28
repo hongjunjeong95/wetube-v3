@@ -92,7 +92,6 @@ export const kakaoStrategy = async (_, __, profile, cb) => {
       kakao_account: { email },
     },
   } = profile;
-  console.log(profile);
   try {
     const user = await User.findOne({ email });
     if (user) {
@@ -134,8 +133,37 @@ export const getMe = async (req, res) => {
   }
 };
 
-export const editProfile = (req, res) => {
-  res.render('editProfile');
+export const getEditProfile = async (req, res) => {
+  const {
+    user: { id },
+  } = req;
+  try {
+    const user = await User.findById(id);
+    res.render('editProfile', { pageTitle: 'editProfile', user });
+  } catch (error) {
+    console.log(error);
+    res.redirect(routes.home);
+  }
+};
+
+export const postEditProfile = async (req, res) => {
+  const {
+    body: { name, status },
+    user: { id },
+    file,
+  } = req;
+  console.log('id', id);
+  try {
+    await User.findByIdAndUpdate(id, {
+      name,
+      status,
+      avatarUrl: file ? file.path : req.user.avatarUrl,
+    });
+    res.redirect(routes.me);
+  } catch (error) {
+    console.log(error);
+    res.redirect(routes.editProfile);
+  }
 };
 
 export const changePassword = (req, res) => {
