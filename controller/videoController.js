@@ -12,8 +12,14 @@ export const getDate = () => {
   return `${year}-${month}-${day}`;
 };
 
-export const home = (req, res) => {
-  res.render('home', { pageTitle: 'home' });
+export const home = async (req, res) => {
+  try {
+    const videos = await Video.find({}).populate('creator').sort({ _id: -1 });
+    res.render('home', { pageTitle: 'home', videos });
+  } catch (error) {
+    console.log(error);
+    res.render('home', { pageTitle: 'home', videos: [] });
+  }
 };
 
 export const search = (req, res) => {
