@@ -86,7 +86,6 @@ export const getEditVideo = async (req, res) => {
   } = req;
   try {
     const video = await Video.findById(id);
-    console.log(video.creator);
     if (String(video.creator) !== req.user.id) {
       throw Error();
     } else {
@@ -112,6 +111,20 @@ export const postEditVideo = async (req, res) => {
   }
 };
 
-export const deleteVideo = (req, res) => {
-  res.render('deleteVideo', { pageTitle: 'deleteVideo' });
+export const deleteVideo = async (req, res) => {
+  const {
+    params: { id },
+  } = req;
+  try {
+    const video = await Video.findById(id);
+    if (String(video.creator) !== req.user.id) {
+      throw Error();
+    } else {
+      await Video.findByIdAndRemove(id);
+      res.redirect(routes.home);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+  res.redirect(routes.home);
 };
