@@ -22,8 +22,17 @@ export const home = async (req, res) => {
   }
 };
 
-export const search = (req, res) => {
-  res.render('search', { pageTitle: 'search' });
+export const search = async (req, res) => {
+  const {
+    query: { term },
+  } = req;
+  try {
+    const videos = await Video.find({ title: { $regex: term, $options: 'i' } });
+    res.render('search', { pageTitle: 'search', videos });
+  } catch (error) {
+    console.log(error);
+    res.render('search', { pageTitle: 'search', videos: [] });
+  }
 };
 
 export const videoDetail = async (req, res) => {
