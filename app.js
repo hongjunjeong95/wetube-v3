@@ -1,4 +1,5 @@
 import express from 'express';
+import { join } from 'path';
 
 import morgan from 'morgan';
 import helmet from 'helmet';
@@ -48,6 +49,7 @@ app.use(passport.session());
 app.use(morgan('dev'));
 app.use(localMiddleware);
 
+app.use(express.static(join(__dirname, 'static')));
 app.use('/uploads', express.static('uploads'));
 
 app.use(routes.home, globalRouter);
