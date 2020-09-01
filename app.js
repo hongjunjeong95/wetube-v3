@@ -48,6 +48,7 @@ app.use(passport.session());
 app.use(morgan('dev'));
 app.use(localMiddleware);
 
+app.use('/static', express.static('static'));
 app.use('/uploads', express.static('uploads'));
 
 app.use(routes.home, globalRouter);
