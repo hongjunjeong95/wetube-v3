@@ -1,0 +1,37 @@
+.videoBlock {
+  margin-bottom: 20px;
+  a {
+    color: black;
+  }
+  .videoBlock__thumnail {
+    margin-bottom: 15px;
+    max-width: 100%;
+    // max-height: 435px;
+  }
+  .videoBlock__detail {
+    display: flex;
+    max-height: 127px;
+    .profile__avatar {
+      margin-right: 10px;
+    }
+    .videoBlock__info {
+      display: flex;
+      flex-direction: column;
+      .videoBlock__title {
+        overflow: hidden;
+        line-height: 1.4;
+        height: 70px;
+        font-weight: 600;
+        font-size: 17px;
+        margin-bottom: 15px;
+      }
+      .videoBlock__subInfo {
+        font-size: 17px;
+        color: #606060;
+        .videoBlock__creator {
+          margin-bottom: 13px;
+        }
+      }
+    }
+  }
+}
