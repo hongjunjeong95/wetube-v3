@@ -1,0 +1,24 @@
+.social-login {
+  max-width: 320px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .social-login--github {
+    margin-bottom: 20px;
+    background-color: $black;
+  }
+  .social-login--kakao {
+    margin-bottom: 20px;
+    background-color: $kakao;
+    a {
+      color: #3c1e1e;
+    }
+  }
+  i {
+    margin-right: 10px;
+  }
+  a {
+    color: white;
+  }
+}
