@@ -1,0 +1,18 @@
+.footer {
+  margin: 50px 0;
+  padding-top: 50px;
+  border-top: 1px solid #c2bdc2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #b3b3b3;
+  font-weight: 600;
+  .footer__icon {
+    margin-bottom: 10px;
+    font-size: 36px;
+  }
+  .footer__text {
+    font-size: 18px;
+  }
+}
