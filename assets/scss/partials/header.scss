@@ -1,0 +1,44 @@
+.header {
+  background-color: $red;
+  margin-bottom: 50px;
+  a {
+    color: white;
+  }
+  .header__wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+    max-width: 1200px;
+    padding: 7px 0;
+    .header__column {
+      i {
+        color: white;
+        font-size: 36px;
+      }
+      &:nth-child(2) {
+        width: 30%;
+        .header__search {
+          input {
+            padding: 7px 10px;
+            border: none;
+            border-radius: 5px;
+            max-width: none;
+            width: 100%;
+            font-weight: 600;
+          }
+        }
+      }
+      &:last-child {
+        ul {
+          display: flex;
+          color: white;
+          font-size: 22px;
+          li:not(:last-child) {
+            margin-right: 20px;
+          }
+        }
+      }
+    }
+  }
+}
