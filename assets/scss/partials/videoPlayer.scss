@@ -1,0 +1,71 @@
+.videopPlayer {
+  margin-bottom: 20px;
+  display: flex;
+
+  position: relative;
+  video {
+    align-self: center;
+    width: 100%;
+    max-width: 100%;
+  }
+  &:hover,
+  &:active {
+    .videoPlyaer__controls,
+    .progressBar {
+      opacity: 1;
+    }
+  }
+
+  .videoPlyaer__controls {
+    opacity: 0;
+    transition: opacity 0.4s linear;
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    bottom: 0px;
+    color: white;
+    font-size: 16px;
+    padding: 10px 15px;
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    #jsVolumeBtn {
+      margin: 0 15px;
+    }
+    #jsVolumeRange {
+      bottom: 65px;
+      left: 7px;
+      width: 80px;
+      z-index: 2;
+    }
+    span {
+      .slash {
+        padding: 0 3px;
+      }
+    }
+    i {
+      width: 20px;
+      cursor: pointer;
+    }
+  }
+  .progressBar {
+    position: absolute;
+    z-index: 2;
+    width: 100%;
+    bottom: 0;
+    opacity: 0;
+    transition: opacity 0.4s linear;
+    .progress {
+      position: relative;
+      bottom: 35px;
+      display: flex;
+      height: 15px;
+      background: rgba(59, 59, 59, 0.5);
+      cursor: pointer;
+    }
+
+    .progress__filled {
+      background: $red;
+      transition: flex-basis 0.25s linear;
+    }
+  }
+}
