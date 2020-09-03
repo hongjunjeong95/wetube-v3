@@ -1,1 +1,1 @@
-import { handleMessageNotif } from './chat';
+import './videoPlayer';
