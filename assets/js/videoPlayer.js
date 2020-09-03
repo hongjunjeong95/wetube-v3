@@ -3,6 +3,7 @@ const videoPlayer = document.querySelector('#jsVideoPlayer video');
 const playBtn = document.getElementById('jsPlayBtn');
 const volumeBtn = document.getElementById('jsVolumeBtn');
 const volumeRange = document.getElementById('jsVolumeRange');
+const fullScreen = document.getElementById('jsFullScreen');
 
 const handlePlayClick = () => {
   if (videoPlayer.paused) {
@@ -42,11 +43,31 @@ const handleVolumeRange = (e) => {
   }
 };
 
+const exitFullScreen = () => {
+  document.exitFullscreen();
+  fullScreen.innerHTML = '<i class="fas fa-expand"></i>';
+  fullScreen.removeEventListener('click', exitFullScreen);
+  fullScreen.addEventListener('click', goFullScreen);
+  videoContainer.removeEventListener('dblclick', exitFullScreen);
+  videoContainer.addEventListener('dblclick', goFullScreen);
+};
+
+const goFullScreen = () => {
+  videoContainer.requestFullscreen();
+  fullScreen.innerHTML = '<i class="fas fa-compress"></i>';
+  fullScreen.removeEventListener('click', goFullScreen);
+  fullScreen.addEventListener('click', exitFullScreen);
+  videoContainer.removeEventListener('dblclick', goFullScreen);
+  videoContainer.addEventListener('dblclick', exitFullScreen);
+};
+
 const init = () => {
   playBtn.addEventListener('click', handlePlayClick);
   videoPlayer.addEventListener('click', handlePlayClick);
   volumeBtn.addEventListener('click', handleVolumeClick);
   volumeRange.addEventListener('input', handleVolumeRange);
+  fullScreen.addEventListener('click', goFullScreen);
+  videoContainer.addEventListener('dblclick', goFullScreen);
 };
 
 if (videoContainer) {
