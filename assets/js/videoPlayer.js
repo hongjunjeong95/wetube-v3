@@ -44,21 +44,37 @@ const handleVolumeRange = (e) => {
 };
 
 const exitFullScreen = () => {
-  document.exitFullscreen();
-  fullScreen.innerHTML = '<i class="fas fa-expand"></i>';
-  fullScreen.removeEventListener('click', exitFullScreen);
-  fullScreen.addEventListener('click', goFullScreen);
-  videoContainer.removeEventListener('dblclick', exitFullScreen);
-  videoContainer.addEventListener('dblclick', goFullScreen);
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+    fullScreen.innerHTML = '<i class="fas fa-expand"></i>';
+    fullScreen.removeEventListener('click', exitFullScreen);
+    fullScreen.addEventListener('click', goFullScreen);
+    videoContainer.removeEventListener('dblclick', exitFullScreen);
+    videoContainer.addEventListener('dblclick', goFullScreen);
+  }
 };
 
 const goFullScreen = () => {
-  videoContainer.requestFullscreen();
-  fullScreen.innerHTML = '<i class="fas fa-compress"></i>';
-  fullScreen.removeEventListener('click', goFullScreen);
-  fullScreen.addEventListener('click', exitFullScreen);
-  videoContainer.removeEventListener('dblclick', goFullScreen);
-  videoContainer.addEventListener('dblclick', exitFullScreen);
+  if (videoContainer.requestFullscreen) {
+    videoContainer.requestFullscreen();
+    fullScreen.innerHTML = '<i class="fas fa-compress"></i>';
+    fullScreen.removeEventListener('click', goFullScreen);
+    fullScreen.addEventListener('click', exitFullScreen);
+    videoContainer.removeEventListener('dblclick', goFullScreen);
+    videoContainer.addEventListener('dblclick', exitFullScreen);
+  }
+};
+
+const handleKeydown = (e) => {
+  if (e.which === 32) {
+    handlePlayClick();
+  }
+};
+
+const preventSpaceScroll = (e) => {
+  if (e.keyCode === 32 && e.target === document.body) {
+    e.preventDefault();
+  }
 };
 
 const init = () => {
@@ -68,6 +84,8 @@ const init = () => {
   volumeRange.addEventListener('input', handleVolumeRange);
   fullScreen.addEventListener('click', goFullScreen);
   videoContainer.addEventListener('dblclick', goFullScreen);
+  document.addEventListener('keydown', handleKeydown);
+  window.addEventListener('keydown', preventSpaceScroll);
 };
 
 if (videoContainer) {
