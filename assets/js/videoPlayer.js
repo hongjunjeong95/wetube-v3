@@ -5,6 +5,8 @@ const volumeBtn = document.getElementById('jsVolumeBtn');
 const volumeRange = document.getElementById('jsVolumeRange');
 const fullScreen = document.getElementById('jsFullScreen');
 
+let fullScrnCheck = false;
+
 const handlePlayClick = () => {
   if (videoPlayer.paused) {
     videoPlayer.play();
@@ -51,6 +53,7 @@ const exitFullScreen = () => {
     fullScreen.addEventListener('click', goFullScreen);
     videoContainer.removeEventListener('dblclick', exitFullScreen);
     videoContainer.addEventListener('dblclick', goFullScreen);
+    fullScrnCheck = false;
   }
 };
 
@@ -62,18 +65,39 @@ const goFullScreen = () => {
     fullScreen.addEventListener('click', exitFullScreen);
     videoContainer.removeEventListener('dblclick', goFullScreen);
     videoContainer.addEventListener('dblclick', exitFullScreen);
+    fullScrnCheck = true;
   }
 };
 
 const handleKeydown = (e) => {
-  if (e.which === 32) {
+  console.log(e.keyCode);
+  if (e.keyCode === 32) {
     handlePlayClick();
+  } else if (e.keyCode === 70) {
+    if (!fullScrnCheck) {
+      goFullScreen();
+      fullScrnCheck = true;
+    } else if (fullScrnCheck) {
+      exitFullScreen();
+      fullScrnCheck = false;
+    }
   }
 };
 
 const preventSpaceScroll = (e) => {
   if (e.keyCode === 32 && e.target === document.body) {
     e.preventDefault();
+  }
+};
+
+const handleESC = () => {
+  if (!document.fullscreenElement) {
+    fullScreen.innerHTML = '<i class="fas fa-expand"></i>';
+    fullScreen.removeEventListener('click', exitFullScreen);
+    fullScreen.addEventListener('click', goFullScreen);
+    videoContainer.removeEventListener('dblclick', exitFullScreen);
+    videoContainer.addEventListener('dblclick', goFullScreen);
+    fullScrnCheck = false;
   }
 };
 
@@ -84,6 +108,7 @@ const init = () => {
   volumeRange.addEventListener('input', handleVolumeRange);
   fullScreen.addEventListener('click', goFullScreen);
   videoContainer.addEventListener('dblclick', goFullScreen);
+  videoContainer.addEventListener('fullscreenchange', handleESC);
   document.addEventListener('keydown', handleKeydown);
   window.addEventListener('keydown', preventSpaceScroll);
 };
