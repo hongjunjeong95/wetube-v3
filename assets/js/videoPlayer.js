@@ -6,6 +6,8 @@ const volumeRange = document.getElementById('jsVolumeRange');
 const fullScreen = document.getElementById('jsFullScreen');
 
 let fullScrnCheck = false;
+videoPlayer.volume = 0.5;
+let volumeValue = 0.5;
 
 const handlePlayClick = () => {
   if (videoPlayer.paused) {
@@ -70,7 +72,6 @@ const goFullScreen = () => {
 };
 
 const handleKeydown = (e) => {
-  console.log(e.keyCode);
   if (e.keyCode === 32) {
     handlePlayClick();
   } else if (e.keyCode === 70) {
@@ -83,11 +84,33 @@ const handleKeydown = (e) => {
     }
   } else if (e.keyCode === 77) {
     handleVolumeClick();
+  } else if (e.keyCode === 38 && videoPlayer.volume < 1) {
+    volumeValue = Math.floor(volumeValue * 10 + 1) / 10;
+    const event = {
+      target: {
+        value: volumeValue,
+      },
+    };
+    volumeRange.value = volumeValue;
+    handleVolumeRange(event);
+  } else if (e.keyCode === 40 && videoPlayer.volume > 0) {
+    volumeValue = Math.floor(volumeValue * 10 - 1) / 10;
+    const event = {
+      target: {
+        value: volumeValue,
+      },
+    };
+    volumeRange.value = volumeValue;
+    handleVolumeRange(event);
   }
 };
 
 const preventSpaceScroll = (e) => {
-  if (e.keyCode === 32 && e.target === document.body) {
+  if (
+    e.keyCode === 32 ||
+    e.keyCode === 38 ||
+    (e.keyCode === 40 && e.target === document.body)
+  ) {
     e.preventDefault();
   }
 };
@@ -111,7 +134,7 @@ const init = () => {
   fullScreen.addEventListener('click', goFullScreen);
   videoContainer.addEventListener('dblclick', goFullScreen);
   videoContainer.addEventListener('fullscreenchange', handleESC);
-  document.addEventListener('keydown', handleKeydown);
+  window.addEventListener('keydown', handleKeydown);
   window.addEventListener('keydown', preventSpaceScroll);
 };
 
