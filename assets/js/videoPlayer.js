@@ -81,6 +81,8 @@ const handleKeydown = (e) => {
       exitFullScreen();
       fullScrnCheck = false;
     }
+  } else if (e.keyCode === 77) {
+    handleVolumeClick();
   }
 };
 
