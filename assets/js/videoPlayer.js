@@ -16,6 +16,7 @@ let fullScrnCheck = false;
 let volumeValue = 0.5;
 let progressMouseDown = false;
 let progressBarClicked = false;
+let duration = null;
 
 const handlePlayClick = () => {
   if (videoPlayer.paused) {
@@ -79,7 +80,7 @@ const goFullScreen = () => {
   }
 };
 
-const handleKeydown = (e) => {
+const handleKeydown = async (e) => {
   if (e.keyCode === 32) {
     handlePlayClick();
   } else if (e.keyCode === 70) {
@@ -110,6 +111,22 @@ const handleKeydown = (e) => {
     };
     volumeRange.value = volumeValue;
     handleVolumeRange(event);
+  } else if (e.keyCode === 37 && videoPlayer.currentTime > 0) {
+    let back = videoPlayer.currentTime - 10;
+    if (back < 0) {
+      back = 0;
+    }
+    videoPlayer.currentTime = back;
+    handleProgress();
+  } else if (e.keyCode === 39 && videoPlayer.currentTime < duration) {
+    let forward = videoPlayer.currentTime + 10;
+    console.log('forward', forward);
+    console.log('duration', duration);
+    if (forward > duration) {
+      forward = duration;
+    }
+    videoPlayer.currentTime = forward;
+    handleProgress();
   }
 };
 
@@ -158,7 +175,7 @@ const getCurrentTime = () => {
 };
 
 const setTotalTime = async () => {
-  const duration = await getBlobDuration(videoPlayer.src);
+  duration = await getBlobDuration(videoPlayer.src);
   const totalTimeString = formatDate(duration);
   totalTime.innerHTML = totalTimeString;
   setInterval(getCurrentTime, 1000);
