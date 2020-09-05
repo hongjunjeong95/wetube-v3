@@ -8,10 +8,14 @@ const volumeRange = document.getElementById('jsVolumeRange');
 const fullScreen = document.getElementById('jsFullScreen');
 const currentTime = document.getElementById('jsCurrentTime');
 const totalTime = document.getElementById('jsTotalTime');
+const progress = document.getElementById('jsProgress');
+const progressBar = document.getElementById('jsProgressBar');
 
-let fullScrnCheck = false;
 videoPlayer.volume = 0.5;
+let fullScrnCheck = false;
 let volumeValue = 0.5;
+let progressMouseDown = false;
+let progressBarClicked = false;
 
 const handlePlayClick = () => {
   if (videoPlayer.paused) {
@@ -160,6 +164,17 @@ const setTotalTime = async () => {
   setInterval(getCurrentTime, 1000);
 };
 
+const handleProgress = () => {
+  const percent = (videoPlayer.currentTime / videoPlayer.duration) * 100;
+  progressBar.style.flexBasis = `${percent}%`;
+};
+
+const scrub = (event) => {
+  const scrubTime =
+    (event.offsetX / progress.offsetWidth) * videoPlayer.duration;
+  videoPlayer.currentTime = scrubTime;
+};
+
 const init = () => {
   playBtn.addEventListener('click', handlePlayClick);
   videoPlayer.addEventListener('click', handlePlayClick);
@@ -171,6 +186,31 @@ const init = () => {
   window.addEventListener('keydown', handleKeydown);
   window.addEventListener('keydown', preventSpaceScroll);
   setTotalTime();
+
+  // Video progress
+  videoPlayer.addEventListener('timeupdate', handleProgress);
+  progress.addEventListener('click', scrub);
+  window.addEventListener(
+    'mousemove',
+    (event) => progressBarClicked && progressMouseDown && scrub(event)
+  );
+
+  // Vidoe progress boolean
+  progress.addEventListener('mousedown', () => {
+    progressMouseDown = true;
+    progressBarClicked = true;
+  });
+  window.addEventListener('mousedown', () => {
+    progressMouseDown = true;
+  });
+
+  progress.addEventListener('mouseup', () => {
+    progressMouseDown = false;
+  });
+  window.addEventListener('mouseup', () => {
+    progressMouseDown = false;
+    progressBarClicked = false;
+  });
 };
 
 if (videoContainer) {
