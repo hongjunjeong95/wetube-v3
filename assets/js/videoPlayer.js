@@ -1,9 +1,13 @@
+import getBlobDuration from 'get-blob-duration';
+
 const videoContainer = document.getElementById('jsVideoPlayer');
 const videoPlayer = document.querySelector('#jsVideoPlayer video');
 const playBtn = document.getElementById('jsPlayBtn');
 const volumeBtn = document.getElementById('jsVolumeBtn');
 const volumeRange = document.getElementById('jsVolumeRange');
 const fullScreen = document.getElementById('jsFullScreen');
+const currentTime = document.getElementById('jsCurrentTime');
+const totalTime = document.getElementById('jsTotalTime');
 
 let fullScrnCheck = false;
 videoPlayer.volume = 0.5;
@@ -126,6 +130,36 @@ const handleESC = () => {
   }
 };
 
+const formatDate = (duration) => {
+  const fullMinutes = Math.floor(duration / 60);
+  const fullHours = Math.floor(fullMinutes / 60);
+  let seconds = Math.floor(duration % 60);
+  let minutes = fullMinutes % 60;
+  let hours = fullHours % 24;
+
+  if (hours < 10) {
+    hours = `0${hours}`;
+  }
+  if (minutes < 10) {
+    minutes = `0${minutes}`;
+  }
+  if (seconds < 10) {
+    seconds = `0${seconds}`;
+  }
+  return `${hours}:${minutes}:${seconds}`;
+};
+
+const getCurrentTime = () => {
+  currentTime.innerHTML = formatDate(videoPlayer.currentTime);
+};
+
+const setTotalTime = async () => {
+  const duration = await getBlobDuration(videoPlayer.src);
+  const totalTimeString = formatDate(duration);
+  totalTime.innerHTML = totalTimeString;
+  setInterval(getCurrentTime, 1000);
+};
+
 const init = () => {
   playBtn.addEventListener('click', handlePlayClick);
   videoPlayer.addEventListener('click', handlePlayClick);
@@ -136,6 +170,7 @@ const init = () => {
   videoContainer.addEventListener('fullscreenchange', handleESC);
   window.addEventListener('keydown', handleKeydown);
   window.addEventListener('keydown', preventSpaceScroll);
+  setTotalTime();
 };
 
 if (videoContainer) {
