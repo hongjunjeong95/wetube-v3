@@ -1,1 +1,2 @@
 import './videoPlayer';
+import './videoRecorder';

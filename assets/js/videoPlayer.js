@@ -1,3 +1,5 @@
+/* eslint-disable operator-linebreak */
+/* eslint-disable arrow-parens */
 import getBlobDuration from 'get-blob-duration';
 
 const videoContainer = document.getElementById('jsVideoPlayer');
@@ -11,7 +13,6 @@ const totalTime = document.getElementById('jsTotalTime');
 const progress = document.getElementById('jsProgress');
 const progressBar = document.getElementById('jsProgressBar');
 
-videoPlayer.volume = 0.5;
 let fullScrnCheck = false;
 let volumeValue = 0.5;
 let progressMouseDown = false;
@@ -80,6 +81,68 @@ const goFullScreen = () => {
   }
 };
 
+const preventSpaceScroll = (e) => {
+  if (
+    e.keyCode === 32 ||
+    e.keyCode === 38 ||
+    (e.keyCode === 40 && e.target === document.body)
+  ) {
+    e.preventDefault();
+  }
+};
+
+const handleESC = () => {
+  if (!document.fullscreenElement) {
+    fullScreen.innerHTML = '<i class="fas fa-expand"></i>';
+    fullScreen.removeEventListener('click', exitFullScreen);
+    fullScreen.addEventListener('click', goFullScreen);
+    videoContainer.removeEventListener('dblclick', exitFullScreen);
+    videoContainer.addEventListener('dblclick', goFullScreen);
+    fullScrnCheck = false;
+  }
+};
+
+const formatDate = (formatTime) => {
+  const fullMinutes = Math.floor(formatTime / 60);
+  const fullHours = Math.floor(fullMinutes / 60);
+  let seconds = Math.floor(formatTime % 60);
+  let minutes = fullMinutes % 60;
+  let hours = fullHours % 24;
+
+  if (hours < 10) {
+    hours = `0${hours}`;
+  }
+  if (minutes < 10) {
+    minutes = `0${minutes}`;
+  }
+  if (seconds < 10) {
+    seconds = `0${seconds}`;
+  }
+  return `${hours}:${minutes}:${seconds}`;
+};
+
+const getCurrentTime = () => {
+  currentTime.innerHTML = formatDate(videoPlayer.currentTime);
+};
+
+const setTotalTime = async () => {
+  duration = await getBlobDuration(videoPlayer.src);
+  const totalTimeString = formatDate(duration);
+  totalTime.innerHTML = totalTimeString;
+  setInterval(getCurrentTime, 1000);
+};
+
+const handleProgress = () => {
+  const percent = (videoPlayer.currentTime / videoPlayer.duration) * 100;
+  progressBar.style.flexBasis = `${percent}%`;
+};
+
+const scrub = (event) => {
+  const scrubTime =
+    (event.offsetX / progress.offsetWidth) * videoPlayer.duration;
+  videoPlayer.currentTime = scrubTime;
+};
+
 const handleKeydown = async (e) => {
   if (e.keyCode === 32) {
     handlePlayClick();
@@ -130,68 +193,6 @@ const handleKeydown = async (e) => {
   }
 };
 
-const preventSpaceScroll = (e) => {
-  if (
-    e.keyCode === 32 ||
-    e.keyCode === 38 ||
-    (e.keyCode === 40 && e.target === document.body)
-  ) {
-    e.preventDefault();
-  }
-};
-
-const handleESC = () => {
-  if (!document.fullscreenElement) {
-    fullScreen.innerHTML = '<i class="fas fa-expand"></i>';
-    fullScreen.removeEventListener('click', exitFullScreen);
-    fullScreen.addEventListener('click', goFullScreen);
-    videoContainer.removeEventListener('dblclick', exitFullScreen);
-    videoContainer.addEventListener('dblclick', goFullScreen);
-    fullScrnCheck = false;
-  }
-};
-
-const formatDate = (duration) => {
-  const fullMinutes = Math.floor(duration / 60);
-  const fullHours = Math.floor(fullMinutes / 60);
-  let seconds = Math.floor(duration % 60);
-  let minutes = fullMinutes % 60;
-  let hours = fullHours % 24;
-
-  if (hours < 10) {
-    hours = `0${hours}`;
-  }
-  if (minutes < 10) {
-    minutes = `0${minutes}`;
-  }
-  if (seconds < 10) {
-    seconds = `0${seconds}`;
-  }
-  return `${hours}:${minutes}:${seconds}`;
-};
-
-const getCurrentTime = () => {
-  currentTime.innerHTML = formatDate(videoPlayer.currentTime);
-};
-
-const setTotalTime = async () => {
-  duration = await getBlobDuration(videoPlayer.src);
-  const totalTimeString = formatDate(duration);
-  totalTime.innerHTML = totalTimeString;
-  setInterval(getCurrentTime, 1000);
-};
-
-const handleProgress = () => {
-  const percent = (videoPlayer.currentTime / videoPlayer.duration) * 100;
-  progressBar.style.flexBasis = `${percent}%`;
-};
-
-const scrub = (event) => {
-  const scrubTime =
-    (event.offsetX / progress.offsetWidth) * videoPlayer.duration;
-  videoPlayer.currentTime = scrubTime;
-};
-
 const init = () => {
   playBtn.addEventListener('click', handlePlayClick);
   videoPlayer.addEventListener('click', handlePlayClick);
@@ -231,5 +232,6 @@ const init = () => {
 };
 
 if (videoContainer) {
+  videoPlayer.volume = 0.5;
   init();
 }
