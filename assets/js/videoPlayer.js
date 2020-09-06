@@ -1,6 +1,7 @@
 /* eslint-disable operator-linebreak */
 /* eslint-disable arrow-parens */
 import getBlobDuration from 'get-blob-duration';
+import axios from 'axios';
 
 const videoContainer = document.getElementById('jsVideoPlayer');
 const videoPlayer = document.querySelector('#jsVideoPlayer video');
@@ -12,6 +13,8 @@ const currentTime = document.getElementById('jsCurrentTime');
 const totalTime = document.getElementById('jsTotalTime');
 const progress = document.getElementById('jsProgress');
 const progressBar = document.getElementById('jsProgressBar');
+const videoViews = document.getElementsByClassName('video__views');
+let viewsCnt = 0;
 
 let fullScrnCheck = false;
 let volumeValue = 0.5;
@@ -193,7 +196,31 @@ const handleKeydown = async (e) => {
   }
 };
 
+const upViewsCnt = () => {
+  viewsCnt = parseInt(videoViews[0].textContent.split(' ')[0], 10);
+  viewsCnt++;
+  if (viewsCnt === 1) videoViews[0].innerText = '1 view';
+  else videoViews[0].innerText = `${viewsCnt} views`;
+};
+
+const registerView = () => {
+  const videoId = window.location.href.split('/videos/')[1];
+
+  axios({
+    method: 'post',
+    url: `/api/${videoId}/view`,
+  });
+  upViewsCnt();
+};
+
+const handleEnded = () => {
+  registerView();
+  playBtn.innerHTML = '<i class="fas fa-play"></i>';
+  videoPlayer.currentTime = 0;
+};
+
 const init = () => {
+  videoPlayer.volume = 0.5;
   playBtn.addEventListener('click', handlePlayClick);
   videoPlayer.addEventListener('click', handlePlayClick);
   volumeBtn.addEventListener('click', handleVolumeClick);
@@ -229,9 +256,11 @@ const init = () => {
     progressMouseDown = false;
     progressBarClicked = false;
   });
+
+  // register View
+  videoPlayer.addEventListener('ended', handleEnded);
 };
 
 if (videoContainer) {
-  videoPlayer.volume = 0.5;
   init();
 }

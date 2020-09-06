@@ -27,6 +27,10 @@ const VIDEO_DETAIL = '/:id';
 const EDIT_VIDEO = '/:id/edit-video';
 const DELETE_VIDEO = '/:id/delete-video';
 
+// api
+const API = '/api';
+const REGISTER_VIEW = '/:id/view';
+
 const routes = {
   // global
   home: HOME,
@@ -69,6 +73,13 @@ const routes = {
   deleteVideo: (id) => {
     if (id) return `/videos/${id}/delete-video`;
     return DELETE_VIDEO;
+  },
+
+  // api
+  api: API,
+  registerView: (id) => {
+    if (id) return `/api/${id}/view`;
+    return REGISTER_VIEW;
   },
 };
 
