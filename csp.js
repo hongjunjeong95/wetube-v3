@@ -1,15 +1,9 @@
-export const githubCSP = (req, res, next) => {
+const csp = (req, res, next) => {
   res.setHeader(
     'Content-Security-Policy',
-    "img-src 'self' https://avatars3.githubusercontent.com"
+    "img-src 'self' https://avatars3.githubusercontent.com http://k.kakaocdn.net https://wetube-v2.s3.amazonaws.com "
   );
   next();
 };
 
-export const kakaoCSP = (req, res, next) => {
-  res.setHeader(
-    'Content-Security-Policy',
-    "img-src 'self' http://k.kakaocdn.net"
-  );
-  next();
-};
+export default csp;

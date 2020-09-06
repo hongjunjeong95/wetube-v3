@@ -17,7 +17,7 @@ import userRouter from './router/userRouter';
 import videoRouter from './router/videoRouter';
 
 import './passport';
-import { githubCSP, kakaoCSP } from './csp';
+import csp from './csp';
 import apiRouter from './router/apiRouter';
 
 const app = express();
@@ -27,8 +27,7 @@ app.use(helmet());
 
 app.set('view engine', 'pug');
 
-app.use(githubCSP);
-app.use(kakaoCSP);
+app.use(csp);
 
 app.use(cookieParser());
 
