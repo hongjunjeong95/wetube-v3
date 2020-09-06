@@ -34,6 +34,7 @@ export const search = async (req, res) => {
     res.render('search', { pageTitle: 'search', videos });
   } catch (error) {
     console.log(error);
+    req.flash('error', "Can't access the search page");
     res.render('search', { pageTitle: 'search', videos: [] });
   }
 };
@@ -66,16 +67,19 @@ export const videoDetail = async (req, res) => {
       JSONUser,
     });
   } catch (error) {
+    req.flash('error', "Can't access the video page");
     console.log(error);
     res.redirect(routes.home);
   }
 };
 
+// Upload
 export const getUpload = (req, res) => {
   try {
     res.render('upload', { pageTitle: 'upload' });
   } catch (error) {
     console.log(error);
+    req.flash('error', "Can't access the upload page");
     res.redirect(routes.home);
   }
 };
@@ -96,9 +100,11 @@ export const postUpload = async (req, res) => {
     });
     req.user.videos.push(newVideo.id);
     req.user.save();
+    req.flash('success', 'Uploading the video success');
     res.redirect(routes.videoDetail(newVideo.id));
   } catch (error) {
     console.log(error);
+    req.flash('error', "Can't upload the video");
     res.redirect(routes.upload);
   }
 };
@@ -116,6 +122,7 @@ export const getEditVideo = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    req.flash('error', "Can't access the editing video page");
     res.redirect(routes.home);
   }
 };
@@ -127,9 +134,11 @@ export const postEditVideo = async (req, res) => {
   } = req;
   try {
     await Video.findByIdAndUpdate(id, { title, description });
+    req.flash('success', 'Editing the video success');
     res.redirect(routes.videoDetail(id));
   } catch (error) {
     console.log(error);
+    req.flash('error', "Can't edit the video");
     res.render('editVideo', { pageTitle: 'editVideo' });
   }
 };
@@ -144,9 +153,10 @@ export const deleteVideo = async (req, res) => {
       throw Error();
     } else {
       await Video.findByIdAndRemove(id);
-      res.redirect(routes.home);
+      req.flash('success', 'Deleting the video success');
     }
   } catch (error) {
+    req.flash('error', "Can't delete the video");
     console.log(error);
   }
   res.redirect(routes.home);
