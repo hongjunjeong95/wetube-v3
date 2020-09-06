@@ -1,3 +1,4 @@
+/* eslint-disable arrow-parens */
 // home
 const HOME = '/';
 const SEARCH = '/search';
@@ -31,6 +32,7 @@ const DELETE_VIDEO = '/:id/delete-video';
 const API = '/api';
 const REGISTER_VIEW = '/:id/view';
 const ADD_COMMENT = '/:id/comment';
+const DELETE_COMMENT = '/:id/comment/delete';
 
 const routes = {
   // global
@@ -85,6 +87,10 @@ const routes = {
   addComment: (id) => {
     if (id) return `/api/${id}/comment`;
     return ADD_COMMENT;
+  },
+  deleteComment: (id) => {
+    if (id) return `/api/${id}/comment/delete`;
+    return DELETE_COMMENT;
   },
 };
 

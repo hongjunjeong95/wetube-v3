@@ -1,3 +1,4 @@
+/* eslint-disable arrow-parens */
 import axios from 'axios';
 
 const commentContainer = document.getElementById('jsCommentContainer');
@@ -6,6 +7,7 @@ const commentTextarea = document.getElementById('jsCommentTextarea');
 const commentAvatar = document.getElementById('jsCommentAvatar');
 const commentList = document.getElementsByClassName('comments__list');
 const commentCntCLASS = document.getElementsByClassName('comments__cnt');
+const deleteComments = document.querySelectorAll('.jsDeleteComment');
 
 let commentCnt = 0;
 
@@ -32,7 +34,7 @@ const sendComment = (comment) => {
 const upCommentCnt = () => {
   commentCnt = parseInt(commentCntCLASS[0].textContent.split(' ')[0], 10);
   commentCnt++;
-  console.log(commentCntCLASS[0].innerText);
+
   if (commentCnt === 1) commentCntCLASS[0].innerText = '1 comment';
   else commentCntCLASS[0].innerText = `${commentCnt} comments`;
 };
@@ -99,8 +101,43 @@ const handleCommentSubmit = (e) => {
   commentTextarea.value = '';
 };
 
+const downCommentCnt = () => {
+  commentCnt = parseInt(commentCntCLASS[0].textContent.split(' ')[0], 10);
+  commentCnt--;
+  if (commentCnt === 1) commentCntCLASS[0].innerText = '1 comment';
+  else commentCntCLASS[0].innerText = `${commentCnt} comments`;
+};
+
+const deleteElement = (e) => {
+  const form = e.target;
+  const column = form.parentNode;
+  const li = column.parentNode;
+  const ul = li.parentNode;
+  ul.removeChild(li);
+};
+
+const handleDeleteComment = (e) => {
+  e.preventDefault();
+  const videoId = window.location.href.split('/videos/')[1];
+  const form = e.target;
+  const input = form.querySelector('input');
+  const id = input.name;
+
+  axios({
+    url: `/api/${videoId}/comment/delete`,
+    method: 'POST',
+    data: { id },
+  });
+
+  downCommentCnt();
+  deleteElement(e);
+};
+
 const init = () => {
   commentForm.addEventListener('submit', handleCommentSubmit);
+  deleteComments.forEach((deleteComment) =>
+    deleteComment.addEventListener('submit', handleDeleteComment)
+  );
 };
 
 if (commentContainer) {
