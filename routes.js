@@ -30,6 +30,7 @@ const DELETE_VIDEO = '/:id/delete-video';
 // api
 const API = '/api';
 const REGISTER_VIEW = '/:id/view';
+const ADD_COMMENT = '/:id/comment';
 
 const routes = {
   // global
@@ -80,6 +81,10 @@ const routes = {
   registerView: (id) => {
     if (id) return `/api/${id}/view`;
     return REGISTER_VIEW;
+  },
+  addComment: (id) => {
+    if (id) return `/api/${id}/comment`;
+    return ADD_COMMENT;
   },
 };
 

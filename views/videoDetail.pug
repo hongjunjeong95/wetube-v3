@@ -25,3 +25,28 @@ block content
           img.creatorAvatar(src=`/${video.creator.avatarUrl}`).avatar--small
         .creatorName #{video.creator.name}
     p.video__description #{video.description}
+  .video__comments#jsCommentContainer
+    if video.comments.length === 1
+      .comments__cnt 1 comments
+    else
+      .comments__cnt #{video.comments.length} comments
+    .comments__add
+      img(src=avatarUrl).avatar--small#jsCommentAvatar
+      form.comments__form#jsCommentForm
+        textarea(placeholder="comment")#jsCommentTextarea
+        input(type="submit" value="comment")
+    ul.comments__list
+      each comment in video.comments.reverse()
+        li.comment__item
+          .comment__column
+            img(src=comment.creator.avatarUrl).avatar--small
+            .comment__content
+              .content__info
+                span.content__userName #{comment.creator.name}
+                span.content__createdAt #{comment.createdAt}
+              .comment
+                span #{comment.text}
+          if loggedUser && loggedUser.id === comment.creator.id
+            .comment__column
+              form.comment__delBtn.jsDeleteComment
+                input(type="submit" value="Delete" name=comment.id)

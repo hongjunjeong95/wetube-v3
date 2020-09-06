@@ -1,5 +1,6 @@
 import routes from '../routes';
 import Video from '../models/Video';
+import User from '../models/User';
 
 export const getDate = () => {
   const date = new Date();
@@ -42,8 +43,28 @@ export const videoDetail = async (req, res) => {
     params: { id },
   } = req;
   try {
-    const video = await Video.findById(id).populate('creator');
-    res.render('videoDetail', { pageTitle: 'videoDetail', video });
+    const avatarUrl =
+      req.user !== undefined
+        ? req.user.avatarUrl
+        : 'https://wetube-v2.s3.amazonaws.com/avatar/06ec794a14dee6374e4e176f470ce90b';
+    const user =
+      req.user === undefined ? undefined : await User.findById(req.user.id);
+    const JSONUser = JSON.stringify(user);
+    const video = await Video.findById(id)
+      .populate('creator')
+      .populate({
+        path: 'comments',
+        populate: {
+          path: 'creator',
+        },
+      });
+    res.render('videoDetail', {
+      pageTitle: video.title,
+      video,
+      avatarUrl,
+      user,
+      JSONUser,
+    });
   } catch (error) {
     console.log(error);
     res.redirect(routes.home);

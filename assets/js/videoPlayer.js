@@ -14,13 +14,15 @@ const totalTime = document.getElementById('jsTotalTime');
 const progress = document.getElementById('jsProgress');
 const progressBar = document.getElementById('jsProgressBar');
 const videoViews = document.getElementsByClassName('video__views');
-let viewsCnt = 0;
+const commentForm = document.getElementById('jsCommentForm');
 
+let viewsCnt = 0;
 let fullScrnCheck = false;
 let volumeValue = 0.5;
 let progressMouseDown = false;
 let progressBarClicked = false;
 let duration = null;
+let commentFocus = false;
 
 const handlePlayClick = () => {
   if (videoPlayer.paused) {
@@ -228,8 +230,15 @@ const init = () => {
   fullScreen.addEventListener('click', goFullScreen);
   videoContainer.addEventListener('dblclick', goFullScreen);
   videoContainer.addEventListener('fullscreenchange', handleESC);
-  window.addEventListener('keydown', handleKeydown);
-  window.addEventListener('keydown', preventSpaceScroll);
+  document.addEventListener(
+    'keydown',
+    (event) => !commentFocus && handleKeydown(event)
+  );
+  window.addEventListener(
+    'keydown',
+    (event) => !commentFocus && preventSpaceScroll(event)
+  );
+
   setTotalTime();
 
   // Video progress
@@ -256,9 +265,17 @@ const init = () => {
     progressMouseDown = false;
     progressBarClicked = false;
   });
+  commentForm.addEventListener('keydown', () => {
+    commentFocus = true;
+  });
 
   // register View
   videoPlayer.addEventListener('ended', handleEnded);
+
+  // Comment
+  commentForm.addEventListener('keyup', () => {
+    commentFocus = false;
+  });
 };
 
 if (videoContainer) {
