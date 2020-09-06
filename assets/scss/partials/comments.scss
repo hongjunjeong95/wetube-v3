@@ -1,0 +1,74 @@
+.video__comments {
+  padding: 20px 0;
+  flex .comments__cnt {
+    margin-bottom: 20px;
+  }
+  .comments__add {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    .comments__form {
+      margin-left: 15px;
+      width: 100%;
+      max-height: 600px;
+      textarea {
+        resize: none;
+        border: none;
+        outline: none;
+        width: 100%;
+        max-height: 600px;
+        font-size: 16px;
+        transition: border-bottom 1s ease-in-out;
+        margin-bottom: 5px;
+        &:focus {
+          border-bottom: 1px solid black;
+        }
+      }
+      input {
+        padding: 10px;
+        font-size: 16px;
+        background-color: #3498db;
+        color: white;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+        transform: translateX(1035px);
+      }
+    }
+  }
+  .comments__list {
+    .comment__item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      .comment__column:first-child {
+        display: flex;
+        .comment__content {
+          margin-left: 10px;
+          .content__info {
+            margin-bottom: 10px;
+            .content__userName {
+              font-weight: 600;
+              margin-right: 10px;
+            }
+            .content__createdAt {
+              font-size: 13px;
+              font-weight: 400;
+            }
+          }
+        }
+      }
+      .comment__delBtn {
+        input {
+          padding: 10px;
+          font-size: 16px;
+          background-color: #3498db;
+          color: white;
+          cursor: pointer;
+          border: none;
+          border-radius: 5px;
+        }
+      }
+    }
+  }
+}
