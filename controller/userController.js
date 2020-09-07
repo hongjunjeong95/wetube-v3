@@ -27,7 +27,7 @@ export const postJoin = async (req, res, next) => {
       const user = await User({
         name,
         email,
-        avatarUrl: file ? file.path : null,
+        avatarUrl: file ? file.location : null,
       });
       await User.register(user, password);
       next();
@@ -192,7 +192,7 @@ export const postEditProfile = async (req, res) => {
     await User.findByIdAndUpdate(id, {
       name,
       status,
-      avatarUrl: file ? file.path : req.user.avatarUrl,
+      avatarUrl: file ? file.location : req.user.avatarUrl,
     });
     req.flash('success', 'Edit success');
     res.redirect(routes.me);

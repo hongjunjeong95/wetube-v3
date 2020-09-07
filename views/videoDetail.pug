@@ -19,10 +19,7 @@ block content
       span.video__createdAt #{video.createdAt}
     .video__creator
       a(href=routes.userDetail(video.creator.id))
-        if video.creator.avatarUrl.startsWith('http')
-          img.creatorAvatar(src=video.creator.avatarUrl).avatar--small
-        else
-          img.creatorAvatar(src=`/${video.creator.avatarUrl}`).avatar--small
+        img.creatorAvatar(src=video.creator.avatarUrl).avatar--small
         .creatorName #{video.creator.name}
     p.video__description #{video.description}
   .video__comments#jsCommentContainer
