@@ -1,6 +1,7 @@
 import passport from 'passport';
 import routes from '../routes';
 import User from '../models/User';
+import { s3 } from '../middlewares';
 
 export const getJoin = (req, res) => {
   try {
@@ -187,8 +188,20 @@ export const postEditProfile = async (req, res) => {
     user: { id },
     file,
   } = req;
-  console.log('id', id);
+
   try {
+    const user = await User.findById(id);
+    const regex = /(http[s]?:\/\/)?([^\/\s]+\/)(.*)/;
+    const filePath = await user.avatarUrl.match(regex)[3];
+    const delFile = {
+      Bucket: 'wetube-v3',
+      Key: filePath,
+    };
+    await s3.deleteObject(delFile, function (err) {
+      if (err) console.log(err);
+      else console.log('The file has been removed');
+    });
+
     await User.findByIdAndUpdate(id, {
       name,
       status,

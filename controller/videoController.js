@@ -156,7 +156,7 @@ export const deleteVideo = async (req, res) => {
       const regex = /(http[s]?:\/\/)?([^\/\s]+\/)(.*)/;
       const filePath = await video.videoUrl.match(regex)[3];
       const delFile = {
-        Bucket: 'wetube-v2',
+        Bucket: 'wetube-v3',
         Key: filePath,
       };
       await s3.deleteObject(delFile, function (err) {
