@@ -1,6 +1,7 @@
 import routes from '../routes';
 import Video from '../models/Video';
 import User from '../models/User';
+import { s3 } from '../middlewares';
 
 export const getDate = () => {
   const date = new Date();
@@ -152,6 +153,17 @@ export const deleteVideo = async (req, res) => {
     if (String(video.creator) !== req.user.id) {
       throw Error();
     } else {
+      const regex = /(http[s]?:\/\/)?([^\/\s]+\/)(.*)/;
+      const filePath = await video.videoUrl.match(regex)[3];
+      const delFile = {
+        Bucket: 'wetube-v2',
+        Key: filePath,
+      };
+      await s3.deleteObject(delFile, function (err) {
+        if (err) console.log(err);
+        else console.log('The file has been removed');
+      });
+
       await Video.findByIdAndRemove(id);
       req.flash('success', 'Deleting the video success');
     }
