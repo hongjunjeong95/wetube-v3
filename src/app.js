@@ -1,5 +1,6 @@
+import '@babel/polyfill'; // To fix "ReferenceError: regeneratorRuntime is not defined"
 import express from 'express';
-import { join } from 'path';
+import path from 'path';
 
 import morgan from 'morgan';
 import helmet from 'helmet';
@@ -52,8 +53,8 @@ app.use(passport.session());
 app.use(morgan('dev'));
 app.use(localMiddleware);
 
-app.use('/static', express.static(join(__dirname, 'static')));
-app.use('/uploads', express.static('uploads'));
+app.use('/static', express.static(path.join(__dirname, 'static')));
+app.set('views', path.join(__dirname, 'views'));
 
 app.use(routes.home, globalRouter);
 app.use(routes.users, userRouter);
