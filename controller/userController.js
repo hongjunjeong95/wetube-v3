@@ -190,17 +190,19 @@ export const postEditProfile = async (req, res) => {
   } = req;
 
   try {
-    const user = await User.findById(id);
-    const regex = /(http[s]?:\/\/)?([^\/\s]+\/)(.*)/;
-    const filePath = await user.avatarUrl.match(regex)[3];
-    const delFile = {
-      Bucket: 'wetube-v3',
-      Key: filePath,
-    };
-    await s3.deleteObject(delFile, function (err) {
-      if (err) console.log(err);
-      else console.log('The file has been removed');
-    });
+    if (file) {
+      const user = await User.findById(id);
+      const regex = /(http[s]?:\/\/)?([^\/\s]+\/)(.*)/;
+      const filePath = await user.avatarUrl.match(regex)[3];
+      const delFile = {
+        Bucket: 'wetube-v3',
+        Key: filePath,
+      };
+      await s3.deleteObject(delFile, function (err) {
+        if (err) console.log(err);
+        else console.log('The file has been removed');
+      });
+    }
 
     await User.findByIdAndUpdate(id, {
       name,
