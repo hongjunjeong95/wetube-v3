@@ -5,7 +5,8 @@ const csp = (req, res, next) => {
     "img-src 'self'\
     https://avatars3.githubusercontent.com\
     http://k.kakaocdn.net\
-    https://wetube-v3.s3.amazonaws.com"
+    https://wetube-v3.s3.amazonaws.com\
+    https://wetube-v3.s3.ap-northeast-2.amazonaws.com"
   );
   next();
 };
