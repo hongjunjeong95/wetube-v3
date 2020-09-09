@@ -12,7 +12,7 @@
     "prebuild": "rm -rf build",
     "build": "npm run build:server && npm run build:assets && npm run copyAll",
     "prestart": "npm run build",
-    "start": "node build/init.js"
+    "start": "PRODUCTION=true node build/init.js"
   },
   "repository": {
     "type": "git",
@@ -49,6 +49,7 @@
     "gulp-csso": "^4.0.1",
     "gulp-sass": "^4.1.0",
     "helmet": "^4.1.0",
+    "heroku": "^7.42.13",
     "mongoose": "^5.9.27",
     "morgan": "^1.10.0",
     "multer": "^1.4.2",
