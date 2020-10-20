@@ -8,13 +8,13 @@
     width: 100%;
     max-width: 100%;
   }
-  &:hover,
-  &:active {
-    .videoPlyaer__controls,
-    .progressBar {
-      opacity: 1;
-    }
-  }
+  // &:hover,
+  // &:active {
+  //   .videoPlyaer__controls,
+  //   .progressBar {
+  //     opacity: 1;
+  //   }
+  // }
 
   .videoPlyaer__controls {
     opacity: 0;
@@ -28,6 +28,7 @@
     padding: 10px 15px;
     background-color: rgba(0, 0, 0, 0.5);
     width: 100%;
+
     #jsVolumeBtn {
       margin: 0 15px;
     }
@@ -67,5 +68,8 @@
       background: $red;
       transition: flex-basis 0.05s linear;
     }
+  }
+  .showing {
+    opacity: 1;
   }
 }

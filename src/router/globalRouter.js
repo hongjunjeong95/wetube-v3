@@ -1,7 +1,7 @@
-import express from 'express';
-import passport from 'passport';
-import routes from '../routes';
-import { home, search } from '../controller/videoController';
+import express from "express";
+import passport from "passport";
+import routes from "../routes";
+import { home, search } from "../controller/videoController";
 import {
   logout,
   getJoin,
@@ -13,8 +13,8 @@ import {
   githubLoginCallback,
   kakaoLogin,
   kakaoLoginCallback,
-} from '../controller/userController';
-import { uploadAvatar, onlyPrivate, onlyPublic } from '../middlewares';
+} from "../controller/userController";
+import { uploadAvatar, onlyPrivate, onlyPublic } from "../middlewares";
 
 const globalRouter = express.Router();
 
@@ -26,7 +26,7 @@ globalRouter.get(routes.me, onlyPrivate, getMe);
 globalRouter.get(routes.join, onlyPublic, getJoin);
 globalRouter.post(routes.join, onlyPublic, uploadAvatar, postJoin, postLogin);
 
-// Loing
+// Login
 globalRouter.get(routes.login, onlyPublic, getLogin);
 globalRouter.post(routes.login, onlyPublic, postLogin);
 
@@ -34,7 +34,7 @@ globalRouter.post(routes.login, onlyPublic, postLogin);
 globalRouter.get(routes.github, githubLogin);
 globalRouter.get(
   routes.githubCallback,
-  passport.authenticate('github', { failureRedirect: routes.login }),
+  passport.authenticate("github", { failureRedirect: routes.login }),
   githubLoginCallback
 );
 
@@ -42,7 +42,7 @@ globalRouter.get(
 globalRouter.get(routes.kakao, kakaoLogin);
 globalRouter.get(
   routes.kakaoCallback,
-  passport.authenticate('kakao', { failureRedirect: routes.login }),
+  passport.authenticate("kakao", { failureRedirect: routes.login }),
   kakaoLoginCallback
 );
 

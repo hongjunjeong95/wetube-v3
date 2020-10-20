@@ -1,20 +1,23 @@
+/* eslint-disable quotes */
 /* eslint-disable operator-linebreak */
 /* eslint-disable arrow-parens */
-import getBlobDuration from 'get-blob-duration';
-import axios from 'axios';
+import getBlobDuration from "get-blob-duration";
+import axios from "axios";
 
-const videoContainer = document.getElementById('jsVideoPlayer');
-const videoPlayer = document.querySelector('#jsVideoPlayer video');
-const playBtn = document.getElementById('jsPlayBtn');
-const volumeBtn = document.getElementById('jsVolumeBtn');
-const volumeRange = document.getElementById('jsVolumeRange');
-const fullScreen = document.getElementById('jsFullScreen');
-const currentTime = document.getElementById('jsCurrentTime');
-const totalTime = document.getElementById('jsTotalTime');
-const progress = document.getElementById('jsProgress');
-const progressBar = document.getElementById('jsProgressBar');
-const videoViews = document.getElementsByClassName('video__views');
-const commentForm = document.getElementById('jsCommentForm');
+const videoContainer = document.getElementById("jsVideoPlayer");
+const videoPlayer = document.querySelector("#jsVideoPlayer video");
+const playBtn = document.getElementById("jsPlayBtn");
+const volumeBtn = document.getElementById("jsVolumeBtn");
+const volumeRange = document.getElementById("jsVolumeRange");
+const fullScreen = document.getElementById("jsFullScreen");
+const currentTime = document.getElementById("jsCurrentTime");
+const totalTime = document.getElementById("jsTotalTime");
+const progress = document.getElementById("jsProgress");
+const progressBar = document.getElementById("jsProgressBar");
+const videoViews = document.getElementsByClassName("video__views");
+const commentForm = document.getElementById("jsCommentForm");
+const controls = document.querySelector(".videoPlyaer__controls");
+const progressContainer = document.querySelector(".progressBar");
 
 let viewsCnt = 0;
 let fullScrnCheck = false;
@@ -23,6 +26,7 @@ let progressMouseDown = false;
 let progressBarClicked = false;
 let duration = null;
 let commentFocus = false;
+let hideTimeout = null;
 
 const handlePlayClick = () => {
   if (videoPlayer.paused) {
@@ -66,10 +70,10 @@ const exitFullScreen = () => {
   if (document.exitFullscreen) {
     document.exitFullscreen();
     fullScreen.innerHTML = '<i class="fas fa-expand"></i>';
-    fullScreen.removeEventListener('click', exitFullScreen);
-    fullScreen.addEventListener('click', goFullScreen);
-    videoContainer.removeEventListener('dblclick', exitFullScreen);
-    videoContainer.addEventListener('dblclick', goFullScreen);
+    fullScreen.removeEventListener("click", exitFullScreen);
+    fullScreen.addEventListener("click", goFullScreen);
+    videoContainer.removeEventListener("dblclick", exitFullScreen);
+    videoContainer.addEventListener("dblclick", goFullScreen);
     fullScrnCheck = false;
   }
 };
@@ -78,10 +82,10 @@ const goFullScreen = () => {
   if (videoContainer.requestFullscreen) {
     videoContainer.requestFullscreen();
     fullScreen.innerHTML = '<i class="fas fa-compress"></i>';
-    fullScreen.removeEventListener('click', goFullScreen);
-    fullScreen.addEventListener('click', exitFullScreen);
-    videoContainer.removeEventListener('dblclick', goFullScreen);
-    videoContainer.addEventListener('dblclick', exitFullScreen);
+    fullScreen.removeEventListener("click", goFullScreen);
+    fullScreen.addEventListener("click", exitFullScreen);
+    videoContainer.removeEventListener("dblclick", goFullScreen);
+    videoContainer.addEventListener("dblclick", exitFullScreen);
     fullScrnCheck = true;
   }
 };
@@ -99,10 +103,10 @@ const preventSpaceScroll = (e) => {
 const handleESC = () => {
   if (!document.fullscreenElement) {
     fullScreen.innerHTML = '<i class="fas fa-expand"></i>';
-    fullScreen.removeEventListener('click', exitFullScreen);
-    fullScreen.addEventListener('click', goFullScreen);
-    videoContainer.removeEventListener('dblclick', exitFullScreen);
-    videoContainer.addEventListener('dblclick', goFullScreen);
+    fullScreen.removeEventListener("click", exitFullScreen);
+    fullScreen.addEventListener("click", goFullScreen);
+    videoContainer.removeEventListener("dblclick", exitFullScreen);
+    videoContainer.addEventListener("dblclick", goFullScreen);
     fullScrnCheck = false;
   }
 };
@@ -188,8 +192,8 @@ const handleKeydown = async (e) => {
     handleProgress();
   } else if (e.keyCode === 39 && videoPlayer.currentTime < duration) {
     let forward = videoPlayer.currentTime + 10;
-    console.log('forward', forward);
-    console.log('duration', duration);
+    console.log("forward", forward);
+    console.log("duration", duration);
     if (forward > duration) {
       forward = duration;
     }
@@ -199,17 +203,17 @@ const handleKeydown = async (e) => {
 };
 
 const upViewsCnt = () => {
-  viewsCnt = parseInt(videoViews[0].textContent.split(' ')[0], 10);
+  viewsCnt = parseInt(videoViews[0].textContent.split(" ")[0], 10);
   viewsCnt++;
-  if (viewsCnt === 1) videoViews[0].innerText = '1 view';
+  if (viewsCnt === 1) videoViews[0].innerText = "1 view";
   else videoViews[0].innerText = `${viewsCnt} views`;
 };
 
 const registerView = () => {
-  const videoId = window.location.href.split('/videos/')[1];
+  const videoId = window.location.href.split("/videos/")[1];
 
   axios({
-    method: 'post',
+    method: "post",
     url: `/api/${videoId}/view`,
   });
   upViewsCnt();
@@ -221,59 +225,77 @@ const handleEnded = () => {
   videoPlayer.currentTime = 0;
 };
 
+const showControls = () => {
+  if (hideTimeout) {
+    clearTimeout(hideTimeout);
+  }
+  controls.classList.add("showing");
+  progressContainer.classList.add("showing");
+  videoContainer.style.cursor = "default";
+  hideTimeout = setTimeout(hideControls, 3000);
+};
+
+const hideControls = () => {
+  controls.classList.remove("showing");
+  progressContainer.classList.remove("showing");
+  videoContainer.style.cursor = "none";
+};
+
 const init = () => {
   videoPlayer.volume = 0.5;
-  playBtn.addEventListener('click', handlePlayClick);
-  videoPlayer.addEventListener('click', handlePlayClick);
-  volumeBtn.addEventListener('click', handleVolumeClick);
-  volumeRange.addEventListener('input', handleVolumeRange);
-  fullScreen.addEventListener('click', goFullScreen);
-  videoContainer.addEventListener('dblclick', goFullScreen);
-  videoContainer.addEventListener('fullscreenchange', handleESC);
+  playBtn.addEventListener("click", handlePlayClick);
+  videoPlayer.addEventListener("click", handlePlayClick);
+  volumeBtn.addEventListener("click", handleVolumeClick);
+  volumeRange.addEventListener("input", handleVolumeRange);
+  fullScreen.addEventListener("click", goFullScreen);
+  videoContainer.addEventListener("dblclick", goFullScreen);
+  videoContainer.addEventListener("fullscreenchange", handleESC);
+  videoContainer.addEventListener("mousemove", showControls);
+  videoContainer.addEventListener("mouseleave", hideControls);
   document.addEventListener(
-    'keydown',
+    "keydown",
     (event) => !commentFocus && handleKeydown(event)
   );
   window.addEventListener(
-    'keydown',
+    "keydown",
     (event) => !commentFocus && preventSpaceScroll(event)
   );
 
   setTotalTime();
 
   // Video progress
-  videoPlayer.addEventListener('timeupdate', handleProgress);
-  progress.addEventListener('click', scrub);
+  videoPlayer.addEventListener("timeupdate", handleProgress);
+  progress.addEventListener("click", scrub);
   window.addEventListener(
-    'mousemove',
+    "mousemove",
     (event) => progressBarClicked && progressMouseDown && scrub(event)
   );
 
   // Vidoe progress boolean
-  progress.addEventListener('mousedown', () => {
+  progress.addEventListener("mousedown", () => {
     progressMouseDown = true;
     progressBarClicked = true;
   });
-  window.addEventListener('mousedown', () => {
+  window.addEventListener("mousedown", () => {
     progressMouseDown = true;
   });
 
-  progress.addEventListener('mouseup', () => {
+  progress.addEventListener("mouseup", () => {
     progressMouseDown = false;
   });
-  window.addEventListener('mouseup', () => {
+  window.addEventListener("mouseup", () => {
     progressMouseDown = false;
     progressBarClicked = false;
   });
-  commentForm.addEventListener('keydown', () => {
+  commentForm.addEventListener("keydown", () => {
     commentFocus = true;
   });
 
   // register View
-  videoPlayer.addEventListener('ended', handleEnded);
+  videoPlayer.addEventListener("ended", handleEnded);
 
   // Comment
-  commentForm.addEventListener('keyup', () => {
+  commentForm.addEventListener("keyup", () => {
     commentFocus = false;
   });
 };
